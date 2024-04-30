@@ -10,6 +10,8 @@ public class sinusouidal{
 	JFrame theframe;
 	JPanel thepanel;
 	
+	//your mommmmmmm
+	
 	//Methods
 	//hey toey
 	//Constructor
