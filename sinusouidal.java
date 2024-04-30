@@ -7,7 +7,7 @@ public class sinusouidal implements ActionListener, KeyListener, MouseListener, 
 	
 	//Properties
 	JFrame theframe = new JFrame("Sinusouidal Function Simulator");
-	JPanel thepanel = new JPanel();;
+	JPanel thepanel = new animationpanel();;
 	
 	
 	//Methods
