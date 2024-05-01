@@ -47,7 +47,8 @@ public class sinusouidal implements ActionListener, KeyListener, MouseListener, 
 	
 	//Constructor
 	public sinusouidal(){
-		thepanel.setPreferredSize(new Dimension(800, 800));
+		thepanel.setPreferredSize(new Dimension(800,800));
+		theframe.setContentPane(thepanel);
 		theframe.pack();
 		thepanel.setVisible(true);
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,6 +58,5 @@ public class sinusouidal implements ActionListener, KeyListener, MouseListener, 
 	public static void main(String args[]){
 		new sinusouidal();
 	}
-	
 }
 	

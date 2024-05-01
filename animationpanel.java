@@ -12,7 +12,7 @@ public class animationpanel extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		
-		g.setColor(Color.WHITE);
+		g.setColor(Color.GREEN);
 		g.fillRect(0,0,800,800);
 	}
 	
