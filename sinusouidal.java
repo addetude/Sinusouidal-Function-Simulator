@@ -7,7 +7,16 @@ public class sinusouidal implements ActionListener, KeyListener, MouseListener, 
 	
 	//Properties
 	JFrame theframe = new JFrame("Sinusouidal Function Simulator");
-	JPanel thepanel = new animationpanel();;
+	animationpanel thepanel = new animationpanel();
+	JMenuBar themenubar = new JMenuBar();
+	JMenu aboutmenu = new JMenu("About");
+	JMenu mainmenu = new JMenu("Main");
+	JMenu helpmenu = new JMenu("Help");
+	JMenuItem aboutmenuitem = new JMenuItem("About");
+	JMenuItem mainmenuitem = new JMenuItem("Main");
+	JMenuItem helpmenuitem = new JMenuItem("Help");
+	JSlider theslider = new JSlider(0,500,0);
+	
 	
 	
 	//Methods
@@ -27,7 +36,17 @@ public class sinusouidal implements ActionListener, KeyListener, MouseListener, 
 		
 	}
 	public void actionPerformed(ActionEvent evt){
-		
+		if(evt.getSource() == aboutmenuitem){
+			System.out.println("pressed");
+			thepanel.intBlockX = 200;
+			thepanel.intBlockY = 200;
+			thepanel.repaint();
+			
+		}else if(evt.getSource() == helpmenu){
+			
+		}else if(evt.getSource() == mainmenu){
+			
+		}
 	}
 	public void keyReleased(KeyEvent evt){
 	
@@ -47,11 +66,36 @@ public class sinusouidal implements ActionListener, KeyListener, MouseListener, 
 	
 	//Constructor
 	public sinusouidal(){
-		thepanel.setPreferredSize(new Dimension(800,800));
+		thepanel.setPreferredSize(new Dimension(1400,800));
 		theframe.setContentPane(thepanel);
+		theframe.setResizable(false);
+		
+		theslider.setLocation(100,100);
+		theslider.setSize(100,100);
+		thepanel.add(theslider);
+		
+		mainmenu.add(mainmenuitem);
+		aboutmenu.add(aboutmenuitem);
+		helpmenu.add(helpmenuitem);
+		
+		themenubar.add(mainmenu);
+		themenubar.add(aboutmenu);
+		themenubar.add(helpmenu);
+		
+		aboutmenu.addActionListener(this);
+		mainmenu.addActionListener(this);
+		helpmenu.addActionListener(this);
+		aboutmenuitem.addActionListener(this);
+		mainmenuitem.addActionListener(this);
+		helpmenuitem.addActionListener(this);
+		theframe.setJMenuBar(themenubar);
+	
+		
 		theframe.pack();
-		thepanel.setVisible(true);
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		theframe.setVisible(true);
+		
+		//mainmenu.addActionListener(this);	
 	}
 	
 	//Main Method
