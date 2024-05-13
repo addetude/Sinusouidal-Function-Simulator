@@ -24,6 +24,7 @@ public class simpanel extends JPanel{
 	String strcb = "sin";
 	
 	//Methods
+	//Set up panel graphics
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.setColor(new Color(238,238,238));
@@ -35,21 +36,23 @@ public class simpanel extends JPanel{
 		g.setColor(Color.BLACK);
 		g.drawImage(imgsin2, 795, 180, null);
 		g.setColor(new Color(40, 150, 20));
-		for(intCount = -188; intCount < 260; intCount++){
+		
+		//Draw sinusoudial function using parameters inputted by user
+		for(intCount = -184; intCount < 263; intCount++){
 			if(strcb == "sin"){
 				int inty = (int)(((inta*-10)*Math.sin((intk*0.01)*(intCount*1.0000000001)+intc*25)-intd*50/10)+250);
 				if(inty >= 15 && inty <= 465){
-					g.drawString("-", intCount+513, inty+3);
+					g.drawString("-", intCount+509, inty+3);
 				}
 			}else if(strcb == "cos"){
 				int inty = (int)(((inta*-10)*Math.cos((intk*0.01)*(intCount*1.0000000001)+intc*25)-intd*50/10)+250);
 				if(inty >= 15 && inty <= 465){
-					g.drawString("-", intCount+513, inty+3);
+					g.drawString("-", intCount+509, inty+3);
 				}
 			}else if(strcb == "tan"){
 				int inty = (int)(((inta*-10)*Math.tan((intk*0.01)*(intCount*1.0000000001)+intc*25)-intd*50/10)+250);
 				if(inty >= 15 && inty <= 465){
-					g.drawString("-", intCount+513, inty+3);
+					g.drawString("-", intCount+509, inty+3);
 				}
 			}
 		}
@@ -58,6 +61,8 @@ public class simpanel extends JPanel{
 	//Constructor
 	public simpanel (){
 		super();
+		
+		//load images and account for IO exceptions
 		try{
 			imgsin = ImageIO.read(new File("SIN.png"));
 			imggraph = ImageIO.read(new File("2.png"));

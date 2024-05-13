@@ -8,12 +8,13 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.event.*;
 import java.awt.event.*;
+import java.io.*;
+import javax.imageio.*;
 
 public class sinusouidal extends JFrame implements ActionListener, ChangeListener{
 	
 	//PROPERTIES
-	//Variables
-	
+	boolean blna = true;
 	
 	//Frame & Panels
 	JFrame theframe = new JFrame("Sinusouidal Function Simulator");
@@ -21,6 +22,8 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 	homepanel hmpanel = new homepanel();
 	helppanel hppanel = new helppanel();
 	simpanel smpanel = new simpanel();
+	quizpanel qzpanel = new quizpanel();
+	scorespanel scpanel = new scorespanel();
 	
 	
 	//Menu
@@ -34,8 +37,9 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 	JMenuItem quizmenuitem = new JMenuItem("Quiz");
 	JMenuItem simulatormenuitem = new JMenuItem("Simulator");
 	JMenuItem homemenuitem = new JMenuItem("Home");
+	JMenuItem scoremenuitem = new JMenuItem("Scores");
 	
-	//Sliders & Text Fields & Labels & Combo Boxes
+	//Sliders & Text Fields & Labels & Combo Boxes & Buttons
 	JSlider aslider = new JSlider(-10, 10, 0);
 	JSlider kslider = new JSlider(-10, 10, 0);
 	JSlider cslider = new JSlider(-10, 10, 0);
@@ -45,6 +49,8 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 	JTextField kfield = new JTextField("1");
 	JTextField cfield = new JTextField("0");
 	JTextField dfield = new JTextField("0");
+	
+	JTextField nametf = new JTextField("");
 	
 	JLabel avalue = new JLabel("a-value");
 	JLabel kvalue = new JLabel("k-value");
@@ -61,12 +67,29 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 	JLabel eqd = new JLabel("");
 	JLabel eqfunc = new JLabel("sin");
 	
-	String[] arr = {"sin", "cos", "tan"} ;
+	JLabel name = new JLabel("Name: ");
+	JLabel q1 = new JLabel("Cos(x) with a phase shift of __ to the ___ gives the sin(x) function");
+	JLabel q2 = new JLabel("What does the 'c' parameter of a sinusoidal function indicate?");
+	JLabel q3 = new JLabel("If cotx = 0, what is x?");
+	
+	String[] arr = {"sin", "cos", "tan"};
+	String[] arr1 = {" ", "π/2, left", "π/2, right", "π, left", "π, right"};
+	String[] arr2 = {" ", "amplitude", "horizontal stretch", "phase shift", "vertical translation"};
+	String[] arr3 = {" ", "π/4", "π/2", "π", "2π"};
 	
 	JComboBox cb = new JComboBox(arr);
+	JComboBox quiz1 = new JComboBox(arr1);	
+	JComboBox quiz2 = new JComboBox(arr2);	
+	JComboBox quiz3 = new JComboBox(arr3);	
 	
+	JButton submit = new JButton("Submit");
+	JButton retake = new JButton("Retake");
+	
+	//Files
+	PrintWriter txtScores;
 	
 	//METHODS
+	//Set Content Pane to a panel based on menu item selected
 	public void actionPerformed(ActionEvent evt){
 		if(evt.getSource() == homemenuitem){
 			theframe.setContentPane(hmpanel);
@@ -76,8 +99,6 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 			theframe.setContentPane(smpanel);
 			theframe.pack();
 			theframe.repaint();
-		}else if(evt.getSource() == mainmenu){
-			
 		}else if(evt.getSource() == helpmenuitem){
 			theframe.setContentPane(hppanel);
 			theframe.pack();
@@ -87,8 +108,15 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 			theframe.pack();
 			theframe.repaint();
 		}else if(evt.getSource() == quizmenuitem){
-			
+			theframe.setContentPane(qzpanel);
+			theframe.pack();
+			theframe.repaint();
+		}else if(evt.getSource() == scoremenuitem){
+			theframe.setContentPane(scpanel);
+			theframe.pack();
+			theframe.repaint();
 		}else if(evt.getSource() == afield){
+			//Get parameter values from textfields
 			smpanel.inta = Integer.parseInt(afield.getText());
 			aslider.setValue(smpanel.inta);
 			smpanel.repaint();
@@ -105,12 +133,56 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 			dslider.setValue(smpanel.intd);
 			smpanel.repaint();
 		}else if(evt.getSource() == cb){
+			//Get preferred function type from combo box
 			smpanel.strcb = (String)cb.getSelectedItem();
 			eqfunc = eqmethfunc(smpanel.strcb);
 			smpanel.add(eqfunc);
 			smpanel.repaint();
+		}else if(evt.getSource() == submit){
+			if(quiz1.getSelectedItem() == "π/2, right"){
+				qzpanel.intPoints += 1;
+			}if(quiz2.getSelectedItem() == "phase shift"){
+				qzpanel.intPoints += 1;
+			}if(quiz3.getSelectedItem() == "π/2"){
+				qzpanel.intPoints += 1;
+			}
+			String strName = nametf.getText();
+			
+			try{
+				txtScores = new PrintWriter(new FileWriter("scores.txt", true));
+			}catch(IOException e){
+				System.out.println("could not load scores.txt");
+			}
+			
+			
+			if(blna == true){
+				txtScores.println(strName);
+				txtScores.println(qzpanel.intPoints);
+				txtScores.close();
+				
+				qzpanel.check = true;
+				quiz1.setEnabled(false);
+				quiz2.setEnabled(false);
+				quiz3.setEnabled(false);
+				qzpanel.repaint();
+				
+				blna = false;
+			}
+		}else if(evt.getSource() == retake){
+			blna = true;
+			quiz1.setEnabled(true);
+			quiz2.setEnabled(true);
+			quiz3.setEnabled(true);
+			quiz1.setSelectedItem(" ");
+			quiz2.setSelectedItem(" ");
+			quiz3.setSelectedItem(" ");
+			qzpanel.intPoints = 0;
+			qzpanel.check = false;
+			qzpanel.repaint();
 		}
 	}
+	
+	//Get perameters from sliders and use values to update equation/graph
 	public void stateChanged(ChangeEvent evt){
 		if(evt.getSource() == aslider){
 			smpanel.inta = aslider.getValue();
@@ -138,36 +210,98 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 			smpanel.repaint();
 		}
 	}
-	public void mouseClicked(MouseEvent evt){
+	
+	//Methods to reproduce graph equation each time peramters are adjusted
+	public JLabel eqmetha(int inta){
+		eqa.setText("");
 		
+		JLabel equation = new JLabel();
+		
+		equation.setSize(100, 50);
+		equation.setForeground(Color.RED);
+		equation.setText(inta+"");
+		equation.setLocation(784, 168);
+		
+		return equation;
 	}
-	public void keyTyped(KeyEvent evt){
+	public JLabel eqmethk(int intk){
+		eqk.setText("");
 		
+		JLabel equation = new JLabel();
+		
+		equation.setSize(100, 50);
+		equation.setForeground(new Color(250, 100, 210));
+		equation.setText(intk+"");
+		equation.setLocation(839, 168);
+		
+		return equation;	
+	}
+	public JLabel eqmethc(int intc){
+		eqc.setText("");
+		
+		JLabel equation = new JLabel();
+		
+		equation.setSize(100, 50);
+		equation.setForeground(Color.BLUE);
+		equation.setText(intc+"");
+		equation.setLocation(883, 168);
+		
+		return equation;
+	}
+	public JLabel eqmethd(int intd){
+		eqd.setText("");
+		
+		JLabel equation = new JLabel();
+		
+		equation.setSize(100, 50);
+		equation.setForeground(new Color(240, 120, 50));
+		equation.setText(intd+"");
+		equation.setLocation(928, 168);
+		
+		return equation;
+	}
+	public JLabel eqmethfunc(String strfunc){
+		eqfunc.setText("");
+		
+		JLabel equation = new JLabel();
+		
+		equation.setSize(100, 50);
+		equation.setForeground(Color.BLACK);
+		equation.setText(strfunc+"");
+		equation.setLocation(812, 168);
+		
+		return equation;
 	}
 	
-	//Constructor
-	
+	//CONSTRUCTOR
 	public sinusouidal(){
 		smpanel.setLayout(null);
+		qzpanel.setLayout(null);
 		
-		//Add Menu Bar
+		//Setup Menu Bar
 		themenubar.add(menumenu);	
 		themenubar.add(mainmenu);	
 		
 		mainmenu.add(simulatormenuitem);
 		mainmenu.add(quizmenuitem);
+		mainmenu.add(scoremenuitem);
 		menumenu.add(homemenuitem);
 		menumenu.add(helpmenuitem);
-		menumenu.add(aboutmenuitem);	
+		menumenu.add(aboutmenuitem);
 		
+		theframe.setJMenuBar(themenubar);
+		
+		//Add Action Listener to menu items and combo boxes
 		aboutmenuitem.addActionListener(this);
 		helpmenuitem.addActionListener(this);
 		quizmenuitem.addActionListener(this);
 		simulatormenuitem.addActionListener(this);
 		homemenuitem.addActionListener(this);
-		cb.addActionListener(this);
+		scoremenuitem.addActionListener(this);
 		
-		theframe.setJMenuBar(themenubar);
+		cb.addActionListener(this);
+		submit.addActionListener(this);
+		retake.addActionListener(this);
 		
 		//Frame & Panel Design
 		theframe.setPreferredSize(new Dimension(960,540));
@@ -177,7 +311,7 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theframe.setVisible(true);
 		
-		//Sliders & Labels & Buttons
+		//Sliders & Labels & Buttons & Text Fields, format and add Change Listeners/Action Listeners
 		aslider.setSize(250, 20);
 		aslider.setLocation(50, 100);
 		aslider.setValue(smpanel.inta);
@@ -252,6 +386,50 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 		cb.setLocation(837, 300);
 		smpanel.add(cb);
 		
+		//Set up quiz panel label & combo box formatting
+		name.setSize(200, 25);
+		name.setLocation(20, 20);
+		qzpanel.add(name);
+		
+		nametf.setSize(100, 20);
+		nametf.setLocation(75, 24);
+		qzpanel.add(nametf);
+		
+		q1.setSize(500, 50);
+		q1.setLocation(20, 50);
+		qzpanel.add(q1);
+		
+		q2.setSize(500, 50);
+		q2.setLocation(20, 150);
+		qzpanel.add(q2);
+		
+		q3.setSize(500, 50);
+		q3.setLocation(20, 260);
+		qzpanel.add(q3);
+		
+		quiz1.setSize(100, 25);
+		quiz1.setLocation(20, 100);
+		qzpanel.add(quiz1);
+		
+		quiz2.setSize(150, 25);
+		quiz2.setLocation(20, 200);
+		qzpanel.add(quiz2);
+		
+		quiz3.setSize(50, 25);
+		quiz3.setLocation(20, 310);
+		qzpanel.add(quiz3);
+		
+		submit.setSize(150, 50);
+		submit.setHorizontalAlignment(JButton.CENTER);
+		submit.setLocation(40, 380);
+		qzpanel.add(submit);
+		
+		retake.setSize(150, 50);
+		retake.setHorizontalAlignment(JButton.CENTER);
+		retake.setLocation(220, 380);
+		qzpanel.add(retake);
+		
+		//set up intial equation for the graph
 		eqa = eqmetha(smpanel.inta);
 		smpanel.add(eqa);
 		
@@ -266,75 +444,16 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 		
 		eqfunc = eqmethfunc(smpanel.strcb);
 		smpanel.add(eqfunc);
+		
 
 	}
 	
-	//Main Method
+	//MAIN METHOD
 	public static void main(String args[]){
 		new sinusouidal();
 	}
 	
-	public JLabel eqmetha(int inta){
-		eqa.setText("");
-		
-		JLabel equation = new JLabel();
-		
-		equation.setSize(100, 50);
-		equation.setForeground(Color.RED);
-		equation.setText(inta+"");
-		equation.setLocation(784, 168);
-		
-		return equation;
-	}
-	public JLabel eqmethk(int intk){
-		eqk.setText("");
-		
-		JLabel equation = new JLabel();
-		
-		equation.setSize(100, 50);
-		equation.setForeground(new Color(250, 100, 210));
-		equation.setText(intk+"");
-		equation.setLocation(839, 168);
-		
-		return equation;	
-	}
-	public JLabel eqmethc(int intc){
-		eqc.setText("");
-		
-		JLabel equation = new JLabel();
-		
-		equation.setSize(100, 50);
-		equation.setForeground(Color.BLUE);
-		equation.setText(intc+"");
-		equation.setLocation(883, 168);
-		
-		return equation;
-	}
-	public JLabel eqmethd(int intd){
-		eqd.setText("");
-		
-		JLabel equation = new JLabel();
-		
-		equation.setSize(100, 50);
-		equation.setForeground(new Color(240, 120, 50));
-		equation.setText(intd+"");
-		equation.setLocation(928, 168);
-		
-		return equation;
-	}
-	public JLabel eqmethfunc(String strfunc){
-		eqfunc.setText("");
-		
-		JLabel equation = new JLabel();
-		
-		equation.setSize(100, 50);
-		equation.setForeground(Color.BLACK);
-		equation.setText(strfunc+"");
-		equation.setLocation(812, 168);
-		
-		return equation;
-		
-	}
+	
 
 }
 	
