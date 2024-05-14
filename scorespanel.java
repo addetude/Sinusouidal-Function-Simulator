@@ -17,12 +17,14 @@ public class scorespanel extends JPanel{
 	int intCounter;
 
 	//Methods
+	//Set up panel graphics
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.setColor(new Color(238,238,238));
 		g.fillRect(0,0,960,540);
 		g.setColor(Color.BLACK);
 		
+		//import scores from file and draw scores on panel
 		try{
 			txtScores = new BufferedReader(new FileReader("scores.txt"));
 			
@@ -41,7 +43,6 @@ public class scorespanel extends JPanel{
 		
 		try{
 			txtScores = new BufferedReader(new FileReader("scores.txt"));
-			//System.out.println(txtScores.readLine());
 			for(intCount = 0; intCount < intCounter; intCount++){
 				strLine = txtScores.readLine();
 				array [intCount][0] = strLine;
@@ -65,6 +66,7 @@ public class scorespanel extends JPanel{
 		}
 	}	
 	
+	//bubble sorting method to organize scores from highest to lowest
 	public String [][] BubbleSort(String [][] array){
 		int intCount = 0;
 		int intLength = array.length;

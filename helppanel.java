@@ -12,14 +12,15 @@ public class helppanel extends JPanel{
 	BufferedImage imghelp;
 
 	//Methods
+	//Set up panel graphics
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.drawImage(imghelp, 0, 0, null);
-		
 	}
 
 	//Constructor
 	public helppanel(){
+		//import help screen and account for IO exception
 		try{
 			imghelp = ImageIO.read(new File("HELP.png"));
 		}catch(IOException e){

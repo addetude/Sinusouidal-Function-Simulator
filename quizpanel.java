@@ -14,11 +14,13 @@ public class quizpanel extends JPanel{
 	boolean check = false;
 
 	//Methods
+	//Set up panel graphics
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.setColor(new Color(238,238,238));
 		g.fillRect(0,0,960,540);
 		g.drawImage(imgart, 500, 40, null);
+		//print quiz score when submit is pressed
 		if(check == true){
 			g.setColor(new Color(40, 150, 20));
 			g.setFont(font);
@@ -28,6 +30,7 @@ public class quizpanel extends JPanel{
 	
 	//Constructor
 	public quizpanel(){
+		//import image and account for IO exception
 		try{
 			imgart = ImageIO.read(new File("sineart.png"));
 		}catch(IOException e){

@@ -12,15 +12,16 @@ public class aboutpanel extends JPanel{
 	BufferedImage imgabout;
 	
 	//Methods
+	//Set up panel graphics
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.drawImage(imgabout, 0, 0, null);
-		
 	}
 	
 	
 	//Constructor
 	public aboutpanel (){
+		//import about screen and account for IO exception
 		try{
 			imgabout = ImageIO.read(new File("ABOUT.png"));
 		}catch(IOException e){

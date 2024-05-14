@@ -14,7 +14,7 @@ import javax.imageio.*;
 public class sinusouidal extends JFrame implements ActionListener, ChangeListener{
 	
 	//PROPERTIES
-	boolean blna = true;
+	boolean blnchecker = true;
 	
 	//Frame & Panels
 	JFrame theframe = new JFrame("Sinusouidal Function Simulator");
@@ -39,7 +39,7 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 	JMenuItem homemenuitem = new JMenuItem("Home");
 	JMenuItem scoremenuitem = new JMenuItem("Scores");
 	
-	//Sliders & Text Fields & Labels & Combo Boxes & Buttons
+	//Initialize Sliders & Text Fields & Labels & Combo Boxes & Buttons
 	JSlider aslider = new JSlider(-10, 10, 0);
 	JSlider kslider = new JSlider(-10, 10, 0);
 	JSlider cslider = new JSlider(-10, 10, 0);
@@ -89,7 +89,7 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 	PrintWriter txtScores;
 	
 	//METHODS
-	//Set Content Pane to a panel based on menu item selected
+	//Set Content Pane to a panel based on menu item selected and repaint
 	public void actionPerformed(ActionEvent evt){
 		if(evt.getSource() == homemenuitem){
 			theframe.setContentPane(hmpanel);
@@ -139,6 +139,7 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 			smpanel.add(eqfunc);
 			smpanel.repaint();
 		}else if(evt.getSource() == submit){
+			//when submit is pressed, calculate number of correct answers
 			if(quiz1.getSelectedItem() == "π/2, right"){
 				qzpanel.intPoints += 1;
 			}if(quiz2.getSelectedItem() == "phase shift"){
@@ -148,14 +149,15 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 			}
 			String strName = nametf.getText();
 			
+			//print user's name and score to score file
 			try{
 				txtScores = new PrintWriter(new FileWriter("scores.txt", true));
 			}catch(IOException e){
 				System.out.println("could not load scores.txt");
 			}
 			
-			
-			if(blna == true){
+			//after subit is pressed, user cannot change answer
+			if(blnchecker == true){
 				txtScores.println(strName);
 				txtScores.println(qzpanel.intPoints);
 				txtScores.close();
@@ -166,10 +168,11 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 				quiz3.setEnabled(false);
 				qzpanel.repaint();
 				
-				blna = false;
+				blnchecker = false;
 			}
 		}else if(evt.getSource() == retake){
-			blna = true;
+			//retake button resets quiz panel
+			blnchecker = true;
 			quiz1.setEnabled(true);
 			quiz2.setEnabled(true);
 			quiz3.setEnabled(true);
@@ -291,7 +294,7 @@ public class sinusouidal extends JFrame implements ActionListener, ChangeListene
 		
 		theframe.setJMenuBar(themenubar);
 		
-		//Add Action Listener to menu items and combo boxes
+		//Add Action Listener to menu items, buttons, and combo boxes
 		aboutmenuitem.addActionListener(this);
 		helpmenuitem.addActionListener(this);
 		quizmenuitem.addActionListener(this);

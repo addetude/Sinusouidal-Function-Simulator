@@ -12,6 +12,7 @@ public class homepanel extends JPanel{
 	BufferedImage imghome;
 	
 	//Methods
+	//Set up panel graphics
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.drawImage(imghome, 0, 0, null);
@@ -19,6 +20,7 @@ public class homepanel extends JPanel{
 	
 	//Constructor
 	public homepanel (){
+		//import home screen and account for IO exception
 		try{
 			imghome = ImageIO.read(new File("HELP.png"));
 		}catch(IOException e){
